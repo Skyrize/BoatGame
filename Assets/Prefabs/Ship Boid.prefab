@@ -659,9 +659,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5066830456571750681}
-  - component: {fileID: 5066830456571751142}
   - component: {fileID: 5066830456571751140}
   - component: {fileID: 5066830456571750680}
+  - component: {fileID: 4476470575570123957}
   m_Layer: 0
   m_Name: Ship Boid
   m_TagString: Untagged
@@ -687,19 +687,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &5066830456571751142
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5066830456571751141}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 6.6725965, y: 19.3, z: 23.42}
-  m_Center: {x: 0, y: 7.7, z: 1.1}
 --- !u!54 &5066830456571751140
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -729,8 +716,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  neighborRadius: 30
-  avoidanceRadiusMultiplier: 0.5
+  neighborRadius: 65
+  avoidanceRadiusMultiplier: 0.35
   driveFactor: 10
   maxSpeed: 10
   flock: {fileID: 0}
@@ -747,5 +734,20 @@ MonoBehaviour:
   steerInput: 0
   accelerationInput: 0
   direction: {x: 0, y: 0, z: 0}
+  test: {x: 0, y: 0, z: 0}
   stop: 0
   precision: 0.3
+--- !u!136 &4476470575570123957
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5066830456571751141}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 3.4
+  m_Height: 20.11
+  m_Direction: 2
+  m_Center: {x: 0, y: 1.21, z: 0}

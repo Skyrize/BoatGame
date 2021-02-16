@@ -49,7 +49,7 @@ public class BoatAgent : FlockAgent
 
     public override void Move(Vector3 newDirection)
     {
-        
+        newDirection = transform.InverseTransformDirection(newDirection);
         newDirection.y = 0;
         Debug.DrawLine(transform.position, transform.position + transform.TransformDirection(newDirection) * 10, Color.black, Time.fixedDeltaTime);
         accelerationInput = newDirection.z;
@@ -60,18 +60,14 @@ public class BoatAgent : FlockAgent
 
     virtual protected void GetDirection()
     {   
-        this.test = path.corners[1] - transform.position;
         this.direction = transform.InverseTransformPoint(path.corners[1]);
         this.direction.y = 0;
-        this.test.y = 0;
         this.direction.Normalize();
-        this.test.Normalize();
 
         //maybe all in direction then renormalize ? 
-        this.steerInput = direction.x;
         var dot = Vector3.Dot(this.direction, Vector3.forward);
         if (dot < 0) {
-            this.steerInput = 1f * Mathf.Sign(steerInput);
+            this.direction.x = 1f * Mathf.Sign(direction.x);
             Debug.Log("backward " + dot.ToString() + this.direction.ToString() + Vector3.forward.ToString());
         }
         // if (dot < -0.7f) {
@@ -86,7 +82,7 @@ public class BoatAgent : FlockAgent
         //         // this.steerInput = -0.3f;
         //     // }
         // }
-        this.accelerationInput = Mathf.Max(direction.z, minAcceleration);
+        this.direction.z = Mathf.Max(direction.z, minAcceleration);
     }
     
     public Vector3 GetInput() {
@@ -108,8 +104,7 @@ public class BoatAgent : FlockAgent
         } else {
             Debug.Log("No path found");
         }
-        Debug.Log("final input = " + new Vector3(this.steerInput, 0, this.accelerationInput).ToString());
-        return new Vector3(this.steerInput, 0, this.accelerationInput); // normalize or not ?
+        return transform.TransformDirection(this.direction); // normalize or not ?
     }
 
     void Move() {

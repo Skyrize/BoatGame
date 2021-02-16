@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
 public abstract class FlockAgent : MonoBehaviour
 {
     [Header("Settings")]
@@ -46,7 +45,7 @@ public abstract class FlockAgent : MonoBehaviour
 
         foreach (Collider obstacle in obstacles)
         {
-            if (obstacle != agentCollider) {
+            if (obstacle.gameObject != gameObject) {
                 result.Add(obstacle.transform);
             }
         }

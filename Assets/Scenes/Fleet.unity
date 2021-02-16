@@ -193,6 +193,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ship Boid (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 5066830456571751141, guid: ddec49165b69c974cb0b05dc37fd207b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddec49165b69c974cb0b05dc37fd207b, type: 3}
 --- !u!4 &7159811 stripped
@@ -249,7 +254,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &214129602
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -488,6 +493,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Ship Boid (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066830456571751141, guid: ddec49165b69c974cb0b05dc37fd207b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddec49165b69c974cb0b05dc37fd207b, type: 3}
@@ -767,6 +777,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Ship Boid (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066830456571751141, guid: ddec49165b69c974cb0b05dc37fd207b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddec49165b69c974cb0b05dc37fd207b, type: 3}
@@ -1646,6 +1661,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ship Boid (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 5066830456571751141, guid: ddec49165b69c974cb0b05dc37fd207b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddec49165b69c974cb0b05dc37fd207b, type: 3}
 --- !u!4 &1623978908 stripped
@@ -1737,6 +1757,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Ship Boid (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066830456571751141, guid: ddec49165b69c974cb0b05dc37fd207b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddec49165b69c974cb0b05dc37fd207b, type: 3}
@@ -1956,7 +1981,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!135 &2080641004
 SphereCollider:
   m_ObjectHideFlags: 0
