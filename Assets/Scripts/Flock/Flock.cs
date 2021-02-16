@@ -28,16 +28,12 @@ public abstract class Flock : MonoBehaviour
     {
         foreach (FlockAgent agent in agents)
         {
-            UpdateAgent(agent);
+            if (agent.isActiveAndEnabled) {
+
+                UpdateAgent(agent);
+            }
         }
 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        UpdateAgents();
-    }
-
 
 }

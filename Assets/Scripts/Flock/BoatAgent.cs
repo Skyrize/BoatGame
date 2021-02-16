@@ -1,37 +1,36 @@
-﻿using System.IO;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BoatController : MonoBehaviour
+public class BoatAgent : FlockAgent
 {
-    [Header("Settings")]
+    [Header("BoatSettings")]
     [SerializeField] protected float maxSteerAngle = 10f;
     [SerializeField] protected float maxSteerSpeed = 10f;
     [SerializeField] protected float speed = 5f;
-    [SerializeField] protected float maxSpeed = 10f;
 
-    [Header("Agent")]
-    [SerializeField] protected  Transform destination = null;
+    [Header("BoatAgent")]
+    [SerializeField] protected Transform destination = null;
     [SerializeField] protected float minAcceleration = 0.3f;
-    [SerializeField] protected  int areaMask = NavMesh.AllAreas;
+    [SerializeField] protected int areaMask = NavMesh.AllAreas;
 
     [Header("References")]
     [SerializeField] protected Rigidbody rb = null;
-    protected  NavMeshPath path;
+    protected NavMeshPath path;
 
     [Header("Runtime")]
     [SerializeField] protected float targetSteerAngle = 5f;
     [SerializeField] protected float currentSteerAngle = 0f;
     [SerializeField] protected float steerInput = 0;
     [SerializeField] protected float accelerationInput = 0;
-    [SerializeField] protected  Vector3 direction = Vector3.zero;
+    [SerializeField] protected Vector3 direction = Vector3.zero;
+    [SerializeField] protected Vector3 test = Vector3.zero;
     
     [Header("Debug")]
-    [SerializeField] protected  bool debug = false;
-    [SerializeField] protected  bool stop = false;
-    [SerializeField] protected  float precision = 0.3f;
+    [SerializeField] protected bool stop = false;
+    [SerializeField] protected float precision = 0.3f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,24 +38,41 @@ public class BoatController : MonoBehaviour
         path = new NavMeshPath();
     }
 
-    // Update is called once per frame
-    void Update()
+    protected void Awake() {
+        if (!agentCollider) {
+            agentCollider = GetComponent<Collider>();
+        }
+        squareMaxSpeed = maxSpeed * maxSpeed;
+        squareNeighborRadius = neighborRadius * neighborRadius;
+        squareAvoidanceRadius = squareNeighborRadius * avoidanceRadiusMultiplier * avoidanceRadiusMultiplier;
+    }
+
+    public override void Move(Vector3 newDirection)
     {
-        GetInput();
+        
+        newDirection.y = 0;
+        Debug.DrawLine(transform.position, transform.position + transform.TransformDirection(newDirection) * 10, Color.black, Time.fixedDeltaTime);
+        accelerationInput = newDirection.z;
+        steerInput = newDirection.x;
+        Move();
+        Steer();
     }
 
     virtual protected void GetDirection()
-    {
+    {   
+        this.test = path.corners[1] - transform.position;
         this.direction = transform.InverseTransformPoint(path.corners[1]);
         this.direction.y = 0;
+        this.test.y = 0;
         this.direction.Normalize();
+        this.test.Normalize();
 
+        //maybe all in direction then renormalize ? 
         this.steerInput = direction.x;
         var dot = Vector3.Dot(this.direction, Vector3.forward);
         if (dot < 0) {
-            //raycast in direction of steerInput, if can turn then turn, if not then check opposite side, if still not then forward
             this.steerInput = 1f * Mathf.Sign(steerInput);
-            Debug.Log("backward");
+            Debug.Log("backward " + dot.ToString() + this.direction.ToString() + Vector3.forward.ToString());
         }
         // if (dot < -0.7f) {
         //     if (dot == -1) {
@@ -73,7 +89,9 @@ public class BoatController : MonoBehaviour
         this.accelerationInput = Mathf.Max(direction.z, minAcceleration);
     }
     
-    protected void GetInput() {
+    public Vector3 GetInput() {
+        if (destination == null)
+            return Vector3.forward;
         if (NavMesh.CalculatePath(transform.position, destination.position, areaMask, path)) {
 
             GetDirection();
@@ -90,6 +108,8 @@ public class BoatController : MonoBehaviour
         } else {
             Debug.Log("No path found");
         }
+        Debug.Log("final input = " + new Vector3(this.steerInput, 0, this.accelerationInput).ToString());
+        return new Vector3(this.steerInput, 0, this.accelerationInput); // normalize or not ?
     }
 
     void Move() {
@@ -107,9 +127,16 @@ public class BoatController : MonoBehaviour
         rb.MoveRotation(steerForce);
     }
 
-    protected virtual void FixedUpdate() {
-        Move();
-        Steer();
+    // protected virtual void FixedUpdate() {
+    //     Move();
+    //     Steer();
+    // }
+    private void OnDrawGizmos() {
+        if (!debug)
+            return;
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, neighborRadius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, neighborRadius * avoidanceRadiusMultiplier);
     }
-
 }

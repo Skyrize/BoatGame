@@ -21,13 +21,13 @@ public class CameraView : MonoBehaviour
     }
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.A)) {
+        if (Input.GetKeyDown(KeyCode.U)) {
             SetView(0);
-        } else if (Input.GetKeyDown(KeyCode.Z)) {
+        } else if (Input.GetKeyDown(KeyCode.I)) {
             SetView(1);
-        } else if (Input.GetKeyDown(KeyCode.E)) {
+        } else if (Input.GetKeyDown(KeyCode.O)) {
             SetView(2);
-        } else if (Input.GetKeyDown(KeyCode.R)) {
+        } else if (Input.GetKeyDown(KeyCode.P)) {
             SetView(3);
         }
 

@@ -9,7 +9,7 @@ public class AlignmentBehavior : FilteredFlockBehavior
     {
         List<Transform> newContext = filter != null ? filter.filter(agent, context) : context;
         if (newContext.Count == 0) {
-            return agent.transform.forward;
+            return Vector3.zero;
         }
         Vector3 alignmentMove = Vector3.zero;
 
