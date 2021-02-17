@@ -13,11 +13,11 @@ public class AvoidanceBehavior : FilteredFlockBehavior
         }
         Vector3 avoidanceMove = Vector3.zero;
         int avoidCount = 0;
-        Debug.Log("==avoid for agent " + agent.gameObject.name);
+        // Debug.Log("==avoid for agent " + agent.gameObject.name);
         foreach (Transform item in newContext)
         {
             if (Vector3.SqrMagnitude(item.position - agent.transform.position) < agent.SquareAvoidanceRadius) {
-                Debug.Log("avoiding agent " + item.gameObject.name);
+                // Debug.Log("avoiding agent " + item.gameObject.name);
                 avoidCount++;
                 avoidanceMove += agent.transform.position - item.position;
             }

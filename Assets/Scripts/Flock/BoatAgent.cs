@@ -68,7 +68,7 @@ public class BoatAgent : FlockAgent
         var dot = Vector3.Dot(this.direction, Vector3.forward);
         if (dot < 0) {
             this.direction.x = 1f * Mathf.Sign(direction.x);
-            Debug.Log("backward " + dot.ToString() + this.direction.ToString() + Vector3.forward.ToString());
+            // Debug.Log("backward " + dot.ToString() + this.direction.ToString() + Vector3.forward.ToString());
         }
         // if (dot < -0.7f) {
         //     if (dot == -1) {
