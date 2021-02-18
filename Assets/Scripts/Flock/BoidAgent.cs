@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class BoidAgent : FlockAgent
 {
-    protected void Awake() {
-        if (!agentCollider) {
-            agentCollider = GetComponent<Collider>();
-        }
+    override protected void Awake() {
         squareMaxSpeed = maxSpeed * maxSpeed;
         squareNeighborRadius = neighborRadius * neighborRadius;
         squareAvoidanceRadius = squareNeighborRadius * avoidanceRadiusMultiplier * avoidanceRadiusMultiplier;

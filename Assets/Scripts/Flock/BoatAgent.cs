@@ -16,7 +16,6 @@ public class BoatAgent : FlockAgent
     [SerializeField] protected int areaMask = NavMesh.AllAreas;
 
     [Header("References")]
-    [SerializeField] protected Rigidbody rb = null;
     protected NavMeshPath path;
 
     [Header("Runtime")]
@@ -31,17 +30,9 @@ public class BoatAgent : FlockAgent
     [SerializeField] protected bool stop = false;
     [SerializeField] protected float precision = 0.3f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
+    override protected void Awake() {
+        base.Awake();
         path = new NavMeshPath();
-    }
-
-    protected void Awake() {
-        if (!agentCollider) {
-            agentCollider = GetComponent<Collider>();
-        }
         squareMaxSpeed = maxSpeed * maxSpeed;
         squareNeighborRadius = neighborRadius * neighborRadius;
         squareAvoidanceRadius = squareNeighborRadius * avoidanceRadiusMultiplier * avoidanceRadiusMultiplier;
@@ -102,7 +93,8 @@ public class BoatAgent : FlockAgent
                 }
             }
         } else {
-            Debug.Log("No path found");
+            if (debug)
+                Debug.Log("No path found");
         }
         return transform.TransformDirection(this.direction); // normalize or not ?
     }

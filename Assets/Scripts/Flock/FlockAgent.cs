@@ -16,6 +16,7 @@ public abstract class FlockAgent : MonoBehaviour
     [Range(1f, 100f)]
     [SerializeField] protected float maxSpeed = 5f;
     public float MaxSpeed { get { return maxSpeed; } }
+    [SerializeField] protected LayerMask collisionMask = 1;
 
     //Computation optimisation
     protected float squareMaxSpeed;
@@ -27,25 +28,25 @@ public abstract class FlockAgent : MonoBehaviour
 
     [Header("References")]
     [SerializeField] public Flock flock;
-    [SerializeField] protected Collider agentCollider;
-    public Collider AgentCollider { get { return agentCollider; } }
-
+    [SerializeField] protected Rigidbody rb;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Awake()
     {
+        if (!rb)
+            rb = GetComponent<Rigidbody>();
     }
 
     public abstract void Move(Vector3 velocity);
 
     public List<Transform> GetNearbyObstacles() 
     {
-        Collider[] obstacles = Physics.OverlapSphere(transform.position, neighborRadius);
+        Collider[] obstacles = Physics.OverlapSphere(transform.position, neighborRadius, collisionMask);
         List<Transform> result = new List<Transform>();
 
         foreach (Collider obstacle in obstacles)
         {
-            if (obstacle.gameObject != gameObject) {
+            if (obstacle.attachedRigidbody != rb) {
                 result.Add(obstacle.transform);
             }
         }
