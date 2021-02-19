@@ -9,14 +9,25 @@ public class DamagesOnTouch : MonoBehaviour
     [Header("References")]
     [SerializeField] private Collider hitBox = null;
 
+    public void ApplyDamages(GameObject target) {
+        HealthComponent targetHealth = target.GetComponentInParent<HealthComponent>();
+
+        if (targetHealth != null) {
+            targetHealth.ReduceHealth(damageAmount);
+        }
+    }
+
     private void OnCollisionEnter(Collision other) {
         ContactPoint contactPoint = other.GetContact(0);
-        HealthComponent otherHealth = other.gameObject.GetComponent<HealthComponent>();
 
-        if (otherHealth != null && contactPoint.thisCollider == hitBox) {
-            otherHealth.ReduceHealth(damageAmount);
+        if (contactPoint.thisCollider == hitBox) {
+            ApplyDamages(other.gameObject);
         }
         
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        ApplyDamages(other.gameObject);
     }
 
     private void Awake() {

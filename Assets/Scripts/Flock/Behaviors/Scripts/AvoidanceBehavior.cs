@@ -16,10 +16,11 @@ public class AvoidanceBehavior : FilteredFlockBehavior
         // Debug.Log("==avoid for agent " + agent.gameObject.name);
         foreach (Transform item in newContext)
         {
-            if (Vector3.SqrMagnitude(item.position - agent.transform.position) < agent.SquareAvoidanceRadius) {
+            Vector3 closestPoint = item.GetComponent<Collider>().ClosestPoint(agent.transform.position);
+            if (Vector3.SqrMagnitude(closestPoint - agent.transform.position) < agent.SquareAvoidanceRadius) {
                 // Debug.Log("avoiding agent " + item.gameObject.name);
                 avoidCount++;
-                avoidanceMove += agent.transform.position - item.position;
+                avoidanceMove += agent.transform.position - closestPoint;
             }
         }
         if (avoidCount != 0) {

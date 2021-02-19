@@ -11,7 +11,7 @@ public class BoatAgent : FlockAgent
     [SerializeField] protected float speed = 5f;
 
     [Header("BoatAgent")]
-    [SerializeField] protected Transform destination = null;
+    [SerializeField] public Transform destination = null;
     [SerializeField] protected float minAcceleration = 0.3f;
     [SerializeField] protected int areaMask = NavMesh.AllAreas;
 

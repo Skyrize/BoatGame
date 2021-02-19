@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62e1eab9b1432be4d95c44a87e85e344, type: 3}
+  m_Name: Boat Hit Animation
+  m_EditorClassIdentifier: 
+  _name: default name
+  duration: 3
+  generalEase: 21
+  reverse: 1
+  loops: 0
+  loopType: 0
+  punch: {x: 0, y: 0, z: 15}
+  vibrato: 2
+  elasticity: 0.19
