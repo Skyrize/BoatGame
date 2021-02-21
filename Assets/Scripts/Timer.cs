@@ -13,6 +13,11 @@ public class Timer : MonoBehaviour
         yield return new WaitForSeconds(delayInSeconds);
         onTimerReached.Invoke();
     }
+
+    public void Kill()
+    {
+        Destroy(this.gameObject);
+    }
     
     public void Delay(float delayInSeconds)
     {

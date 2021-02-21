@@ -117,4 +117,8 @@ public class HealthComponent : MonoBehaviour
         onHealEvent.Invoke(amount);
     }
 
+    public void Kill() {
+        Destroy(this.gameObject);
+    }
+
 }

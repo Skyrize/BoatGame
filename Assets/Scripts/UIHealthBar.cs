@@ -10,11 +10,16 @@ public class UIHealthBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        image = GetComponent<Image>();
+        if (!image) {
+            image = GetComponent<Image>();
+        }
     }
 
     public void UpdateHealth(float ratio)
     {
+        if (!image) {
+            image = GetComponent<Image>();
+        }
         if (ratio <= 0.33f) {
             image.color = Color.red;
         }

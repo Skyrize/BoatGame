@@ -16,8 +16,8 @@ MonoBehaviour:
   - behavior: {fileID: 11400000, guid: c1fbacb1501cb6b4ab5b5f36e1524998, type: 2}
     weight: 1
   - behavior: {fileID: 11400000, guid: 126b608669c31904cba0cf540e18ab63, type: 2}
-    weight: 2
+    weight: 1
   - behavior: {fileID: 11400000, guid: 32372445908a73b41ba49a726bef9f9d, type: 2}
-    weight: 0.5
+    weight: 1
   - behavior: {fileID: 11400000, guid: a9c3eb320a715e643a61405edb8bcbdc, type: 2}
-    weight: 2
+    weight: 1.2

@@ -22,4 +22,18 @@ public class EventBinder : MonoBehaviour
             }
         }
     }
+    private IEnumerator _Delay(string eventName, float delayInSeconds)
+    {
+        yield return new WaitForSeconds(delayInSeconds);
+        foreach (EventBind eventBind in events)
+        {
+            if (eventBind.name == eventName) {
+                eventBind.evt.Invoke();
+            }
+        }
+    }
+
+    public void DelayEvent(string eventName, float seconds) {
+        StartCoroutine(_Delay(eventName, seconds));
+    }
 }

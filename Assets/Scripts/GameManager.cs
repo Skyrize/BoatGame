@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     }
 
     protected Camera cam;
-    protected Plane seeLevel = new Plane(Vector3.forward, Vector3.zero);
+    protected Plane seeLevel = new Plane(Vector3.up, Vector3.zero);
 
     protected void Awake() {
         instance = this;
@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) {
             SelectWithMouse();
         }
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(1)) {
             MoveFleet();
         }
     }

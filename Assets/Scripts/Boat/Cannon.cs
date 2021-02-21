@@ -21,11 +21,17 @@ public class Cannon : MonoBehaviour
     [Header("Runtime")]
     [SerializeField] protected bool isLoaded = true;
 
+    private GameObject cannonBall = null;
+
     private Flock parentFlock;
     // Start is called before the first frame update
     void Start()
     {
         parentFlock = GetComponentInParent<Flock>();
+        cannonBall = GameObject.Instantiate(cannonBallPrefab, transform.position, transform.rotation, transform);
+        
+        cannonBall.GetComponent<EventBinder>().CallEvent("Disable");
+        cannonBall.SetActive(false);
     }
 
     // Update is called once per frame
@@ -69,12 +75,16 @@ public class Cannon : MonoBehaviour
     public void Fire() {
         if (!isLoaded || !CanFire())
             return;
-        isLoaded = false;
-        GameObject cannonBall = GameObject.Instantiate(cannonBallPrefab, transform.position, transform.rotation);
-
-        cannonBall.GetComponent<Rigidbody>().AddForce(transform.forward * ejectionForce, ForceMode.Impulse);
-        onFire.Invoke();
-        Invoke("Reload", reloadTime);
+        if (cannonBall.GetComponent<CannonBall>().enabled == false) {
+            isLoaded = false;
+            cannonBall.SetActive(true);
+            cannonBall.GetComponent<EventBinder>().CallEvent("Reset");
+            cannonBall.transform.position = transform.position;
+            cannonBall.transform.rotation = transform.rotation;
+            cannonBall.GetComponent<Rigidbody>().AddForce(transform.forward * ejectionForce, ForceMode.Impulse);
+            onFire.Invoke();
+            Invoke("Reload", reloadTime);
+        }
     }
 
     private void OnDrawGizmos() {

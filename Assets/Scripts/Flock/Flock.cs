@@ -28,7 +28,7 @@ public abstract class Flock : MonoBehaviour
     {
         foreach (FlockAgent agent in agents)
         {
-            if (agent.isActiveAndEnabled) {
+            if (agent && agent.isActiveAndEnabled) {
 
                 UpdateAgent(agent);
             }

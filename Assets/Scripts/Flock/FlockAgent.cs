@@ -13,7 +13,7 @@ public abstract class FlockAgent : MonoBehaviour
     [Range(1f, 100f)]
     [SerializeField] protected float driveFactor = 10f;
     public float DriveFactor { get { return driveFactor; } }
-    [Range(1f, 100f)]
+    [Range(0f, 100f)]
     [SerializeField] protected float maxSpeed = 5f;
     public float MaxSpeed { get { return maxSpeed; } }
     [SerializeField] protected LayerMask collisionMask = 1;
@@ -25,6 +25,8 @@ public abstract class FlockAgent : MonoBehaviour
     public float SquareNeighborRadius { get { return squareNeighborRadius; } }
     protected float squareAvoidanceRadius;
     public float SquareAvoidanceRadius { get { return squareAvoidanceRadius; } }
+    protected float avoidanceRadius;
+    public float AvoidanceRadius { get { return avoidanceRadius; } }
 
     [Header("References")]
     [SerializeField] public Flock flock;
@@ -35,6 +37,10 @@ public abstract class FlockAgent : MonoBehaviour
     {
         if (!rb)
             rb = GetComponent<Rigidbody>();
+        squareMaxSpeed = maxSpeed * maxSpeed;
+        squareNeighborRadius = neighborRadius * neighborRadius;
+        avoidanceRadius = neighborRadius * avoidanceRadiusMultiplier;
+        squareAvoidanceRadius = squareNeighborRadius * avoidanceRadiusMultiplier * avoidanceRadiusMultiplier;
     }
 
     public abstract void Move(Vector3 velocity);
@@ -51,5 +57,13 @@ public abstract class FlockAgent : MonoBehaviour
             }
         }
         return result;
+    }
+    private void OnDrawGizmos() {
+        if (!debug)
+            return;
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, neighborRadius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, neighborRadius * avoidanceRadiusMultiplier);
     }
 }

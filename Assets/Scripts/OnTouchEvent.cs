@@ -19,7 +19,6 @@ public class OnTouchEvent : MonoBehaviour
     [SerializeField] private CollisionEvent onTouch = new CollisionEvent();
 
     private void OnCollisionEnter(Collision other) {
-        Debug.Log("collide");
         if (useTag) {
             if (tags.Contains(other.gameObject.tag)) {
                 onTouch.Invoke(other.gameObject);
@@ -29,7 +28,6 @@ public class OnTouchEvent : MonoBehaviour
         }
     }
     private void OnTriggerEnter(Collider other) {
-        Debug.Log("trigger");
         if (useTag) {
             if (tags.Contains(other.gameObject.tag)) {
                 onTouch.Invoke(other.gameObject);

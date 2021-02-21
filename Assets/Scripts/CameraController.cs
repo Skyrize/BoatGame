@@ -32,17 +32,18 @@ public class CameraController : MonoBehaviour
         direction.x = Input.GetAxisRaw("Horizontal");
         direction.z = Input.GetAxisRaw("Vertical");
 
-        if (Input.mousePosition.x <= xMin) {
-            direction.x = -1;
-        } else if (Input.mousePosition.x >= xMax) {
-            direction.x = 1;
+        if (!debug) {
+            if (Input.mousePosition.x <= xMin) {
+                direction.x = -1;
+            } else if (Input.mousePosition.x >= xMax) {
+                direction.x = 1;
+            }
+            if (Input.mousePosition.y <= yMin) {
+                direction.z = -1;
+            } else if (Input.mousePosition.y >= yMax) {
+                direction.z = 1;
+            }          
         }
-        if (Input.mousePosition.y <= yMin) {
-            direction.z = -1;
-        } else if (Input.mousePosition.y >= yMax) {
-            direction.z = 1;
-        }
-
 
         direction.Normalize();
         direction.x *= speed;

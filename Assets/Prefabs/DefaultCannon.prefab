@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170b9c706723ec946a4edf40b6bc1091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reloadTime: 1
+  reloadTime: 2
   ejectionForce: 100
   mask:
     serializedVersion: 2
@@ -52,7 +52,7 @@ MonoBehaviour:
   protectionRange: 0.15
   protectionLenght: 200
   protectionAngle: 6.5
-  debug: 1
+  debug: 0
   debugProtectionMultiplier: 0.05
   onFire:
     m_PersistentCalls:

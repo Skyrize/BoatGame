@@ -11,6 +11,7 @@ public class FleetController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Unselect();
     }
 
     // Update is called once per frame
@@ -41,6 +42,7 @@ public class FleetController : MonoBehaviour
         {
             binder.CallEvent("Select");
         }
+        fleetTarget.GetComponent<EventBinder>().CallEvent("Select");
     }
     public void Unselect()
     {
@@ -50,5 +52,6 @@ public class FleetController : MonoBehaviour
         {
             binder.CallEvent("Unselect");
         }
+        fleetTarget.GetComponent<EventBinder>().CallEvent("Unselect");
     }
 }

@@ -6,13 +6,13 @@ using UnityEngine.AI;
 public class BoatAgent : FlockAgent
 {
     [Header("BoatSettings")]
-    [SerializeField] protected float maxSteerAngle = 10f;
+    [SerializeField] protected float steerSpeed = 10f;
     [SerializeField] protected float maxSteerSpeed = 10f;
     [SerializeField] protected float speed = 5f;
+    [SerializeField] protected float minAcceleration = 0.3f;
 
     [Header("BoatAgent")]
     [SerializeField] public Transform destination = null;
-    [SerializeField] protected float minAcceleration = 0.3f;
     [SerializeField] protected int areaMask = NavMesh.AllAreas;
 
     [Header("References")]
@@ -33,13 +33,14 @@ public class BoatAgent : FlockAgent
     override protected void Awake() {
         base.Awake();
         path = new NavMeshPath();
-        squareMaxSpeed = maxSpeed * maxSpeed;
-        squareNeighborRadius = neighborRadius * neighborRadius;
-        squareAvoidanceRadius = squareNeighborRadius * avoidanceRadiusMultiplier * avoidanceRadiusMultiplier;
     }
 
     public override void Move(Vector3 newDirection)
     {
+        if (!isActiveAndEnabled) {
+            rb.velocity = Vector3.zero;
+            return;
+        }
         newDirection = transform.InverseTransformDirection(newDirection);
         newDirection.y = 0;
         Debug.DrawLine(transform.position, transform.position + transform.TransformDirection(newDirection) * 10, Color.black, Time.fixedDeltaTime);
@@ -59,26 +60,13 @@ public class BoatAgent : FlockAgent
         var dot = Vector3.Dot(this.direction, Vector3.forward);
         if (dot < 0) {
             this.direction.x = 1f * Mathf.Sign(direction.x);
-            // Debug.Log("backward " + dot.ToString() + this.direction.ToString() + Vector3.forward.ToString());
         }
-        // if (dot < -0.7f) {
-        //     if (dot == -1) {
-        //         this.steerInput = 1f;
-        //         Debug.Log("backward");
-        //     } else {
-        //         this.steerInput = Mathf.Sign(this.steerInput) * minSteerInput;
-        //     }
-        //     // if (Random.Range(0, 2) == 0) {
-        //     // } else {
-        //         // this.steerInput = -0.3f;
-        //     // }
-        // }
         this.direction.z = Mathf.Max(direction.z, minAcceleration);
     }
     
     public Vector3 GetInput() {
         if (destination == null)
-            return Vector3.forward;
+            return transform.forward;
         if (NavMesh.CalculatePath(transform.position, destination.position, areaMask, path)) {
 
             GetDirection();
@@ -101,29 +89,30 @@ public class BoatAgent : FlockAgent
 
     void Move() {
         Vector3 accelerationForce = transform.forward * accelerationInput * speed;
+        Vector3 finalForce;
 
         accelerationForce.y = 0;
         rb.AddForce(accelerationForce);
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
+        finalForce = transform.InverseTransformDirection(Vector3.ClampMagnitude(rb.velocity, maxSpeed));
+        finalForce.z = Mathf.Max(finalForce.z, minAcceleration);
+        // Debug.Log(gameObject.name + finalForce.ToString());
+        rb.velocity = transform.TransformDirection(finalForce);
+        if (debug) {
+            Debug.DrawLine(transform.position, transform.position + finalForce * 10, Color.red, Time.fixedDeltaTime);
+            Debug.DrawLine(transform.position, transform.position + rb.velocity * 10, Color.green, Time.fixedDeltaTime);
+        }
     }
 
     void Steer() {
-        targetSteerAngle = maxSteerAngle * steerInput;
-        currentSteerAngle = Mathf.Lerp(currentSteerAngle, targetSteerAngle, Time.deltaTime * maxSteerSpeed);
-        Quaternion steerForce = Quaternion.Euler(rb.rotation.eulerAngles + transform.up * currentSteerAngle * Time.fixedDeltaTime);
+        targetSteerAngle = steerSpeed * steerInput;
+        // currentSteerAngle = Mathf.Lerp(currentSteerAngle, targetSteerAngle, Time.deltaTime * maxSteerSpeed);
+        Quaternion steerForce = Quaternion.Euler(rb.rotation.eulerAngles + transform.up * targetSteerAngle * Time.fixedDeltaTime);
         rb.MoveRotation(steerForce);
+        rb.angularVelocity = Vector3.ClampMagnitude(rb.angularVelocity, maxSteerSpeed);
     }
 
     // protected virtual void FixedUpdate() {
     //     Move();
     //     Steer();
     // }
-    private void OnDrawGizmos() {
-        if (!debug)
-            return;
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, neighborRadius);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, neighborRadius * avoidanceRadiusMultiplier);
-    }
 }
