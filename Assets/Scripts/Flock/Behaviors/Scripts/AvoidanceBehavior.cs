@@ -27,7 +27,7 @@ public class AvoidanceBehavior : FilteredFlockBehavior
                 }
                 // Debug.Log("avoiding agent " + item.gameObject.name);
                 avoidCount++;
-                avoidanceMove += dist.normalized * agent.AvoidanceRadius - dist;
+                avoidanceMove += dist.normalized * agent.AvoidanceRadius;
             }
         }
         if (avoidCount != 0) {

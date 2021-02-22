@@ -15,6 +15,8 @@ public class EventBinder : MonoBehaviour
     protected EventBind[] events;
 
     public void CallEvent(string eventName) {
+        if (!isActiveAndEnabled)
+            return;
         foreach (EventBind eventBind in events)
         {
             if (eventBind.name == eventName) {

@@ -50,9 +50,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 3073
   protectionRange: 0.15
-  protectionLenght: 200
-  protectionAngle: 6.5
-  debug: 0
+  protectionLength: 100
+  protectionAngle: 9
+  nbProtectionRays: 6
+  debug: 1
   debugProtectionMultiplier: 0.05
   onFire:
     m_PersistentCalls:

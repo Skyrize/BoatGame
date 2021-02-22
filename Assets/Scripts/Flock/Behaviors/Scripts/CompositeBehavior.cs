@@ -17,7 +17,7 @@ public class CompositeBehavior : FlockBehavior
     {
         Vector3 result = Vector3.zero;
 
-            // Debug.Log("---------------------agent move = " + agent.gameObject.name);
+            Debug.Log("---------------------agent move = " + agent.gameObject.name);
         foreach (Behavior item in behaviors)
         {
             Vector3 move = item.behavior.CalculateMove(agent, context) * item.weight;
@@ -28,10 +28,10 @@ public class CompositeBehavior : FlockBehavior
                 move = move.normalized * item.weight;
             }
             // Debug.Log("---------------last move normalized =" + move.ToString());
-            // Debug.Log("Adding move = " + move.ToString());
+            Debug.Log("Adding move = " + move.ToString());
             result += move;
         }
-        // Debug.Log("---------TOTAAAAL = " + result.ToString());
+        Debug.Log("---------TOTAAAAL = " + result.ToString());
 
         return result;
     }

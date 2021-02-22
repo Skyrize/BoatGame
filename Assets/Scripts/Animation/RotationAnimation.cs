@@ -12,14 +12,14 @@ public class RotationAnimation : TweenAnimation
     override public GeneratedAnimation GenerateAnimation(Transform target) {
         Sequence animation = DOTween.Sequence();
         if (reverse) {
-            animation.Append(target.DORotate(rotation, duration / 2));
-            animation.Append(target.DORotate(target.localEulerAngles, duration / 2));
+            animation.Append(target.DORotate(rotation, duration / 2).SetEase(generalEase));
+            animation.Append(target.DORotate(target.localEulerAngles, duration / 2).SetEase(generalEase));
         } else {
             animation.Append(target.DORotate(rotation, duration));
         }
         animation.SetAutoKill(false);
         animation.SetLoops(loops, loopType);
-        animation.SetEase(generalEase);
+        // animation.SetEase(generalEase);
         animation.Pause();
         return new GeneratedAnimation(animation, Name);
     }

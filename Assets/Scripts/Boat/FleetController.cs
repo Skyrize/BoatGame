@@ -7,10 +7,15 @@ public class FleetController : MonoBehaviour
     [Header("References")]
     [SerializeField] protected Transform fleetTarget = null;
 
-    private bool hasSetDestination = false;
     // Start is called before the first frame update
     void Start()
     {
+        var boatAgents = GetComponentsInChildren<BoatAgent>();
+
+        foreach (BoatAgent agent in boatAgents)
+        {
+            agent.destination = fleetTarget;
+        }
         Unselect();
     }
 
@@ -23,14 +28,24 @@ public class FleetController : MonoBehaviour
     public void SetDestination(Vector3 destination)
     {
         fleetTarget.position = destination;
-        if (!hasSetDestination) {
-            hasSetDestination = true;
-            var boatAgents = GetComponentsInChildren<BoatAgent>();
+    }
 
-            foreach (BoatAgent agent in boatAgents)
-            {
-                agent.destination = fleetTarget;
-            }
+    public void FireLeft()
+    {
+        var boatBinders = GetComponentsInChildren<EventBinder>();
+
+        foreach (EventBinder binder in boatBinders)
+        {
+            binder.CallEvent("Fire Left");
+        }
+    }
+    public void FireRight()
+    {
+        var boatBinders = GetComponentsInChildren<EventBinder>();
+
+        foreach (EventBinder binder in boatBinders)
+        {
+            binder.CallEvent("Fire Right");
         }
     }
 

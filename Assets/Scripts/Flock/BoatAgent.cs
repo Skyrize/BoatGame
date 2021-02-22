@@ -1,15 +1,16 @@
-﻿using System.Collections;
+﻿using System.Net;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class BoatAgent : FlockAgent
 {
-    [Header("BoatSettings")]
     [SerializeField] protected float steerSpeed = 10f;
     [SerializeField] protected float maxSteerSpeed = 10f;
     [SerializeField] protected float speed = 5f;
     [SerializeField] protected float minAcceleration = 0.3f;
+    [SerializeField] protected float compensationSpeed = 0.3f;
 
     [Header("BoatAgent")]
     [SerializeField] public Transform destination = null;
@@ -24,6 +25,7 @@ public class BoatAgent : FlockAgent
     [SerializeField] protected float steerInput = 0;
     [SerializeField] protected float accelerationInput = 0;
     [SerializeField] protected Vector3 direction = Vector3.zero;
+    [SerializeField] protected Vector3 finalForce = Vector3.zero;
     [SerializeField] protected Vector3 test = Vector3.zero;
     
     [Header("Debug")]
@@ -43,11 +45,14 @@ public class BoatAgent : FlockAgent
         }
         newDirection = transform.InverseTransformDirection(newDirection);
         newDirection.y = 0;
-        Debug.DrawLine(transform.position, transform.position + transform.TransformDirection(newDirection) * 10, Color.black, Time.fixedDeltaTime);
+        if (debug) {
+            Debug.DrawLine(transform.position, transform.position + transform.TransformDirection(newDirection) * 10, Color.black, Time.fixedDeltaTime);
+        }
         accelerationInput = newDirection.z;
         steerInput = newDirection.x;
         Move();
         Steer();
+        CompensateInertia();
     }
 
     virtual protected void GetDirection()
@@ -89,7 +94,6 @@ public class BoatAgent : FlockAgent
 
     void Move() {
         Vector3 accelerationForce = transform.forward * accelerationInput * speed;
-        Vector3 finalForce;
 
         accelerationForce.y = 0;
         rb.AddForce(accelerationForce);
@@ -109,6 +113,13 @@ public class BoatAgent : FlockAgent
         Quaternion steerForce = Quaternion.Euler(rb.rotation.eulerAngles + transform.up * targetSteerAngle * Time.fixedDeltaTime);
         rb.MoveRotation(steerForce);
         rb.angularVelocity = Vector3.ClampMagnitude(rb.angularVelocity, maxSteerSpeed);
+    }
+
+    void CompensateInertia() {
+        // Debug.Log(rb.inertiaTensorRotation);
+        // rb.ResetInertiaTensor();
+        // Quaternion compensationForce = Quaternion.Slerp(rb.inertiaTensorRotation, Quaternion.Euler(0, rb.inertiaTensorRotation.eulerAngles.y, 0), Time.fixedDeltaTime * compensationSpeed);
+        // rb.AddTorque(compensationForce.eulerAngles);
     }
 
     // protected virtual void FixedUpdate() {

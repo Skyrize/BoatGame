@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Security.Cryptography;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,6 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] protected LayerMask selectableMask = 1;
     [Header("Runtime")]
     [SerializeField] protected FleetController controlledFleet = null;
+    [SerializeField]
+    protected List<FleetController> fleets = new List<FleetController>();
     [Header("Events")]
     [SerializeField] protected UnityEvent onLevelStart = new UnityEvent();
     [SerializeField] protected UnityEvent onWin = new UnityEvent();
@@ -84,6 +87,14 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         onLevelStart.Invoke();
+        var allFleets = GameObject.FindObjectsOfType<FleetController>();
+
+        foreach (var fleet in allFleets)
+        {
+            if (fleet.GetComponentInParent<TeamManager>().team == Team.PLAYER) {
+                fleets.Add(fleet);
+            }
+        }
     }
 
     void UnselectFleet()
@@ -94,9 +105,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void FocusFleet()
+    {
+        if (!controlledFleet)
+            return;
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        float distance;
+        seeLevel.Raycast(ray, out distance);
+        Vector3 move = controlledFleet.transform.GetChild(0).position - ray.direction * distance;
+        move.y = cam.transform.position.y;
+        cam.transform.position = move;
+    }
+
     void SelectFleet(FleetController target)
     {
-        if (controlledFleet == target)
+        if (controlledFleet == target || target.GetComponentInParent<TeamManager>().team != Team.PLAYER)
             return;
         UnselectFleet();
         controlledFleet = target;
@@ -104,7 +127,7 @@ public class GameManager : MonoBehaviour
     }
 
     void SelectWithMouse() {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         BoatAgent target = null;
 
@@ -123,7 +146,7 @@ public class GameManager : MonoBehaviour
     void MoveFleet() {
         if (!controlledFleet)
             return;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         float distance;
         seeLevel.Raycast(ray, out distance);
         controlledFleet.SetDestination(ray.GetPoint(distance));
@@ -137,6 +160,30 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(1)) {
             MoveFleet();
+        }
+        if (Input.GetKey(KeyCode.Space)) {
+            FocusFleet();
+        }
+        
+        
+        if (Input.GetKeyDown(KeyCode.A) && controlledFleet) {
+            controlledFleet.FireLeft();
+            
+        }
+        
+        if (Input.GetKeyDown(KeyCode.E) && controlledFleet) {
+            controlledFleet.FireRight();
+            
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            GetComponent<SceneManager>().LoadScene("Menu");
+        }
+
+        for (int i = 0; i != fleets.Count; i++) {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i)) {
+                SelectFleet(fleets[i]);
+            }
         }
     }
 }

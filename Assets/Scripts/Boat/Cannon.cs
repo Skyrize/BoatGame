@@ -10,8 +10,9 @@ public class Cannon : MonoBehaviour
     [SerializeField] protected float ejectionForce = 100f;
     [SerializeField] protected LayerMask mask = 0;
     [SerializeField] protected float protectionRange = 0.2f;
-    [SerializeField] protected float protectionLenght = 100f;
+    [SerializeField] protected float protectionLength = 100f;
     [SerializeField] protected float protectionAngle = 2f;
+    [SerializeField] protected int nbProtectionRays = 3;
     [SerializeField] protected bool debug = true;
     [SerializeField] protected float debugProtectionMultiplier = 1f;
     [Header("Events")]
@@ -44,36 +45,52 @@ public class Cannon : MonoBehaviour
         isLoaded = true;
     }
 
-    private bool _canFire(Vector3 point, Vector3 angleDirection) {
+    private bool _canFire(Vector3 point, Vector3 endPoint) {
+        bool canFire = true;
         RaycastHit hit;
         BoatAgent targetBoat;
         Vector3 origin = transform.position + point;
-        Vector3 finalPoint = transform.position + point + angleDirection * protectionAngle + transform.forward * protectionLenght;
-        Vector3 direction = finalPoint - origin;
+        Vector3 direction = endPoint - origin;
         
-        if (debug) {
-            Debug.DrawLine(origin, finalPoint, Color.yellow, .5f);
-        }
-        if (Physics.Raycast(origin, direction, out hit, protectionLenght, mask)) {
+        if (Physics.Raycast(origin, direction, out hit, protectionLength, mask)) {
             targetBoat = hit.transform.GetComponent<BoatAgent>();
             if (targetBoat && targetBoat.flock == parentFlock) {
-                return false;
+                canFire = false;
             }
         }
-        return true;
+        if (debug) {
+            Debug.DrawLine(origin, endPoint, canFire ? Color.yellow : Color.blue, 1.5f);
+            // Debug.Break();
+        }
+
+        return canFire;
     }
 
     public bool CanFire() {
-        Vector3 pointCenter = Vector3.zero;
-        Vector3 pointUp = transform.up * protectionRange;
-        Vector3 pointDownLeft = (- transform.up - transform.right) * protectionRange;
-        Vector3 pointDownRight = (- transform.up + transform.right) * protectionRange;
+        Vector3 length = transform.forward * protectionLength;
 
-        return _canFire(pointCenter, pointCenter) && _canFire(pointUp, transform.up) && _canFire(pointDownLeft, -transform.right) && _canFire(pointDownRight, transform.right);
+        if (!_canFire(transform.position, transform.position + length)) {
+            return false;
+        }
+        for (int i = 0; i != nbProtectionRays; i++) {
+            float angleMult = (float)(i + 1) / (float)nbProtectionRays;
+            Vector3 pointLeft = (- transform.up - transform.right) * protectionRange * angleMult;
+            Vector3 pointRight = (- transform.up + transform.right) * protectionRange * angleMult;
+            Vector3 endPointLeft = transform.position + pointLeft - transform.right * protectionAngle * angleMult + length;
+            Vector3 endPointRight = transform.position + pointRight + transform.right * protectionAngle * angleMult + length;
+            
+            if (!_canFire(pointLeft, endPointLeft)
+            || !_canFire(pointRight, endPointRight))
+                return false;
+        }
+
+        return (true);
     }
 
     public void Fire() {
-        if (!isLoaded || !CanFire())
+        if (!isLoaded)
+            return;
+        if (!CanFire())
             return;
         if (cannonBall.GetComponent<CannonBall>().enabled == false) {
             isLoaded = false;
@@ -89,16 +106,20 @@ public class Cannon : MonoBehaviour
 
     private void OnDrawGizmos() {
         if (debug) {
-            Vector3 pointUp = transform.up * protectionRange;
-            Vector3 pointDownLeft = (- transform.up - transform.right) * protectionRange;
-            Vector3 pointDownRight = (- transform.up + transform.right) * protectionRange;
-            Vector3 lenght = transform.forward * protectionLenght * debugProtectionMultiplier;
+
+            Vector3 length = transform.forward * protectionLength * debugProtectionMultiplier;
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, transform.position + lenght);
+            Gizmos.DrawLine(transform.position, transform.position + length);
+            
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position + pointUp, transform.position + pointUp + transform.up * protectionAngle + lenght);
-            Gizmos.DrawLine(transform.position + pointDownLeft, transform.position + pointDownLeft - transform.right * protectionAngle + lenght);
-            Gizmos.DrawLine(transform.position + pointDownRight, transform.position + pointDownRight + transform.right * protectionAngle + lenght);
+            for (int i = 0; i != nbProtectionRays; i++) {
+                float angleMult = (float)(i + 1) / (float)nbProtectionRays;
+                Vector3 pointLeft = (- transform.up - transform.right) * protectionRange * angleMult;
+                Vector3 pointRight = (- transform.up + transform.right) * protectionRange * angleMult;
+                
+                Gizmos.DrawLine(transform.position + pointLeft, transform.position + pointLeft - transform.right * protectionAngle * angleMult + length);
+                Gizmos.DrawLine(transform.position + pointRight, transform.position + pointRight + transform.right * protectionAngle * angleMult + length);
+            }
         }
     }
 }

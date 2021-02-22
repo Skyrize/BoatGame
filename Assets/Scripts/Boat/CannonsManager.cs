@@ -9,26 +9,23 @@ public class CannonsManager : MonoBehaviour
     protected Cannon[] leftCannons;
     [SerializeField]
     protected Cannon[] rightCannons;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public void FireLeft()
     {
-        if (Input.GetKeyDown(KeyCode.Q)) {
-            foreach (Cannon item in leftCannons)
-            {
-                item.Fire();
-            }
+        if (!isActiveAndEnabled)
+            return;
+        foreach (Cannon item in leftCannons)
+        {
+            item.Fire();
         }
-        if (Input.GetKeyDown(KeyCode.D)) {
-            foreach (Cannon item in rightCannons)
-            {
-                item.Fire();
-            }
+    }
+    public void FireRight()
+    {
+        if (!isActiveAndEnabled)
+            return;
+        foreach (Cannon item in rightCannons)
+        {
+            item.Fire();
         }
     }
 }

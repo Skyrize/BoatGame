@@ -11,7 +11,7 @@ public class SameFlockFilter : ContextFilter
 
         foreach (Transform item in originalContext)
         {
-            FlockAgent itemAgent = item.GetComponent<FlockAgent>();
+            FlockAgent itemAgent = item.GetComponentInParent<FlockAgent>();
 
             if (itemAgent != null && itemAgent.flock == agent.flock) {
                 filtered.Add(item);
