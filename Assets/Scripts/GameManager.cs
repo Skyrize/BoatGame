@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] protected FleetController controlledFleet = null;
     [SerializeField]
     protected List<FleetController> fleets = new List<FleetController>();
+    [SerializeField] protected int remainingPlayerFleets = -1;
+    [SerializeField] protected int remainingEnemyFleets = -1;
     [Header("Events")]
     [SerializeField] protected UnityEvent onLevelStart = new UnityEvent();
     [SerializeField] protected UnityEvent onWin = new UnityEvent();
@@ -83,16 +85,39 @@ public class GameManager : MonoBehaviour
         onLose.Invoke();
     }
 
+    void DecreasePlayerFleet()
+    {
+        remainingPlayerFleets--;
+        if (remainingPlayerFleets == 0) {
+            onLose.Invoke();
+        }
+    }
+
+    void DecreaseEnemyFleet()
+    {
+        remainingEnemyFleets--;
+        if (remainingEnemyFleets == 0) {
+            onWin.Invoke();
+        }  
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         onLevelStart.Invoke();
         var allFleets = GameObject.FindObjectsOfType<FleetController>();
 
+        remainingPlayerFleets = 0;
+        remainingEnemyFleets = 0;
         foreach (var fleet in allFleets)
         {
             if (fleet.GetComponentInParent<TeamManager>().team == Team.PLAYER) {
                 fleets.Add(fleet);
+                fleet.onFleetDestroyed.AddListener(DecreasePlayerFleet);
+                remainingPlayerFleets++;
+            } else {
+                fleet.onFleetDestroyed.AddListener(DecreaseEnemyFleet);
+                remainingEnemyFleets++;
             }
         }
     }

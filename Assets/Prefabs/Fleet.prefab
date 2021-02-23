@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5897326235740483160}
   - component: {fileID: 5897326235740483163}
   - component: {fileID: 5897326235740483162}
+  - component: {fileID: 8917875499089622087}
   m_Layer: 0
   m_Name: Fleet
   m_TagString: Untagged
@@ -71,7 +72,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ce1e05c5f057b94aafab6a46800f028, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onFleetDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
   fleetTarget: {fileID: 7858014420265911678}
+  remainingBoats: -1
+--- !u!114 &8917875499089622087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5897326235740483165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1253a5621281f9a44b85b788d5953f96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6274376514677817376
 MonoBehaviour:
   m_ObjectHideFlags: 0
