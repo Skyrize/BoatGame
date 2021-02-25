@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
         }
         
         
-        if (Input.GetKeyDown(KeyCode.A) && controlledFleet) {
+        if (Input.GetKeyDown(KeyCode.Q) && controlledFleet) {
             controlledFleet.FireLeft();
             
         }

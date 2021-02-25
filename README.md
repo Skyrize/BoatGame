@@ -1,6 +1,17 @@
 # BoatGame
  Boat game project using Boids for my Heriot-Watt Master course
 
+____
+## Controls
+
+Mouse Left : Select fleet
+Mouse Right : Set destination of selected fleet
+1 / 2 / 3 / 4 / ... : Select fleet 1 / 2 / 3 / 4 / ...
+WASD : move camera
+Q : Fire Left
+E : Fire Right
+Space : Focus selected fleet
+Escape : Return to the main menu
 
 ____
 ### Ressources
