@@ -98,7 +98,7 @@ public class BoatAgent : FlockAgent
 
         rb.AddForce(accelerationForce);
         finalForce = transform.InverseTransformDirection(Vector3.ClampMagnitude(rb.velocity, maxSpeed));
-        finalForce.z = Mathf.Max(Mathf.Abs(finalForce.z), minAcceleration) * Mathf.Sign(finalForce.z);
+        finalForce.z = Mathf.Max(finalForce.z, minAcceleration);
         // Debug.Log(gameObject.name + finalForce.ToString());
         rb.velocity = transform.TransformDirection(finalForce);
         if (debug) {
@@ -118,8 +118,8 @@ public class BoatAgent : FlockAgent
     void Float()
     {
         rb.centerOfMass = transform.position;
-        Vector3 cheat = transform.position;
-        cheat.y = 0;
-        transform.position = cheat;
+        Vector3 rectify = transform.position;
+        rectify.y = 0;
+        transform.position = rectify;
     }
 }
