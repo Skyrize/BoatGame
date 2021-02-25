@@ -2,15 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.AI;
 
+[System.Serializable]
+public class FleetEvent : UnityEvent<FleetController>
+{
+}
 public class FleetController : MonoBehaviour
 {
     [Header("Events")]
-    [SerializeField] public UnityEvent onFleetDestroyed = new UnityEvent();
+    [SerializeField] public FleetEvent onFleetDestroyed = new FleetEvent();
     [Header("References")]
     [SerializeField] protected Transform fleetTarget = null;
     [Header("Runtime")]
     [SerializeField] protected int remainingBoats = -1;
+    public int RemainingBoats {
+        get {
+            return remainingBoats;
+        }
+    }
+
+    public Vector3 Position {
+        get {
+            return transform.GetChild(0).position;
+        }
+    }
 
     // Start is called before the first frame update
     virtual protected void Start()
@@ -30,7 +46,7 @@ public class FleetController : MonoBehaviour
     {
         remainingBoats--;
         if (remainingBoats == 0) {
-            onFleetDestroyed.Invoke();
+            onFleetDestroyed.Invoke(this);
         }
     }
 
@@ -42,7 +58,11 @@ public class FleetController : MonoBehaviour
 
     public void SetDestination(Vector3 destination)
     {
-        fleetTarget.position = destination;
+        NavMeshHit hit;
+
+        if (NavMesh.SamplePosition(destination, out hit, 1000f, NavMesh.AllAreas)) {
+            fleetTarget.position = hit.position;
+        }
     }
 
     public void FireLeft()

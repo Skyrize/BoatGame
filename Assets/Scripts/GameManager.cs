@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
         onLose.Invoke();
     }
 
-    void DecreasePlayerFleet()
+    void DecreasePlayerFleet(FleetController target)
     {
         remainingPlayerFleets--;
         if (remainingPlayerFleets == 0) {
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void DecreaseEnemyFleet()
+    void DecreaseEnemyFleet(FleetController target)
     {
         remainingEnemyFleets--;
         if (remainingEnemyFleets == 0) {

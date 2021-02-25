@@ -25,6 +25,8 @@ public class Cannon : MonoBehaviour
     private GameObject cannonBall = null;
 
     private Flock parentFlock;
+
+    bool isAI = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +35,10 @@ public class Cannon : MonoBehaviour
         
         cannonBall.GetComponent<EventBinder>().CallEvent("Disable");
         cannonBall.SetActive(false);
+
+        if (GetComponentInParent<TeamManager>().team != Team.PLAYER) {
+            isAI = true;
+        }
     }
 
     // Update is called once per frame
@@ -55,7 +61,13 @@ public class Cannon : MonoBehaviour
         if (Physics.Raycast(origin, direction, out hit, protectionLength, mask)) {
             targetBoat = hit.transform.GetComponent<BoatAgent>();
             if (targetBoat && targetBoat.flock == parentFlock) {
-                canFire = false;
+                if (isAI) {
+                    if (targetBoat.Team != Team.PLAYER) {
+                        canFire = false;
+                    }
+                } else {
+                    canFire = false;
+                }
             }
         }
         if (debug) {

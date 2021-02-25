@@ -7,6 +7,7 @@ public struct Behavior
 {
     public FlockBehavior behavior;
     public float weight;
+    public float max;
 }
 
 [CreateAssetMenu(menuName = "Flock/Behavior/Composite")]
@@ -24,8 +25,8 @@ public class CompositeBehavior : FlockBehavior
 
             // Debug.Log("last move =" + move.ToString());
             //un peu de la merde ça (c'est un clamp un peu nul en fait)
-            if (move.sqrMagnitude != 0 && move.sqrMagnitude > item.weight * item.weight) {
-                move = move.normalized * item.weight;
+            if (move.sqrMagnitude != 0 && move.sqrMagnitude > item.max * item.max) {
+                move = move.normalized * item.max;
             }
             // Debug.Log("---------------last move normalized =" + move.ToString());
             // Debug.Log("Adding move = " + move.ToString());

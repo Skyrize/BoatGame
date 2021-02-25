@@ -26,7 +26,7 @@ public class SteeredCohesionBehavior : FilteredFlockBehavior
         steeredCohesionMove /= newContext.Count;
         // Debug.Log("Filtered Steered2 = " + steeredCohesionMove.ToString());
 
-        // steeredCohesionMove -= agent.transform.position;
+        steeredCohesionMove -= agent.transform.position;
         // Debug.Log("Filtered Steered3 = " + Time.deltaTime);
         
         Vector3 smoothed = Vector3.SmoothDamp(agent.transform.forward, steeredCohesionMove, ref currentVelocity, agentSmoothTime);

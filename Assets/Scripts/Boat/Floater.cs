@@ -17,20 +17,22 @@ public class Floater : MonoBehaviour
     [SerializeField] protected Rigidbody rb;
     
     private void FixedUpdate() {
-        float waveHeight = WaveManager.Instance.GetWaveHeight(transform.position.x);
+        // float waveHeight = WaveManager.Instance.GetWaveHeight(transform.position.x);
+        float waveHeight = 0;
 
         rb.AddForceAtPosition(Physics.gravity / floaterCount, transform.position, ForceMode.Acceleration);
         if (transform.position.y < waveHeight) {
             debugColor = Color.yellow;
-            float displacementMultiplier = (waveHeight - transform.position.y) / depthBeforeSubmerged * displacementAmount;
-            rb.drag = displacementMultiplier * waterDrag;
-            rb.angularDrag = displacementMultiplier * waterAngularDrag;
+            // float displacementMultiplier = (waveHeight - transform.position.y) / depthBeforeSubmerged * displacementAmount;
+            float displacementMultiplier = - transform.position.y * displacementAmount;
+            // rb.drag = displacementMultiplier * waterDrag;
+            // rb.angularDrag = displacementMultiplier * waterAngularDrag;
             // rb.AddForce(displacementMultiplier * -rb.velocity * waterDrag * Time.fixedDeltaTime, ForceMode.Acceleration);
             // rb.AddTorque(displacementMultiplier * -rb.angularVelocity * waterAngularDrag * Time.fixedDeltaTime, ForceMode.Acceleration);
-            rb.AddForceAtPosition(new Vector3(0f, Mathf.Abs(Physics.gravity.y) * displacementMultiplier, 0f), transform.position, ForceMode.Acceleration);
+            rb.AddForceAtPosition(- Physics.gravity * displacementMultiplier, transform.position, ForceMode.Acceleration);
         } else {
-            rb.drag = 0;
-            rb.angularDrag = 0;
+            // rb.drag = 0;
+            // rb.angularDrag = 0;
             debugColor = Color.red;
         }
         Debug.DrawLine(transform.position, transform.position + rb.velocity, debugColor, Time.fixedDeltaTime);
