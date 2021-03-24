@@ -39,11 +39,11 @@ public class BoatController : MonoBehaviour
         path = new NavMeshPath();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        GetInput();
-    }
+    // // Update is called once per frame
+    // void Update()
+    // {
+    //     GetInput();
+    // }
 
     virtual protected void GetDirection()
     {

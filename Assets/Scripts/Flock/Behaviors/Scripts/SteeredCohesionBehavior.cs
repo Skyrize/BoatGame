@@ -12,7 +12,6 @@ public class SteeredCohesionBehavior : FilteredFlockBehavior
     public override Vector3 CalculateMove(in FlockAgent agent, in List<Transform> context)
     {
         List<Transform> newContext = filter != null ? filter.filter(agent, context) : context;
-        // Debug.Log("Filtered Steered = " + newContext.Count);
         if (newContext.Count == 0) {
             return Vector3.zero;
         }
@@ -22,12 +21,9 @@ public class SteeredCohesionBehavior : FilteredFlockBehavior
         {
             steeredCohesionMove += item.position;
         }
-        // Debug.Log("Filtered Steered1 = " + steeredCohesionMove.ToString());
         steeredCohesionMove /= newContext.Count;
-        // Debug.Log("Filtered Steered2 = " + steeredCohesionMove.ToString());
 
         steeredCohesionMove -= agent.transform.position;
-        // Debug.Log("Filtered Steered3 = " + Time.deltaTime);
         
         Vector3 smoothed = Vector3.SmoothDamp(agent.transform.forward, steeredCohesionMove, ref currentVelocity, agentSmoothTime);
         if (float.IsNaN(smoothed.x) || float.IsNaN(smoothed.y) || float.IsNaN(smoothed.z)) {

@@ -15,17 +15,11 @@ public class AvoidanceBehavior : FilteredFlockBehavior
         }
         Vector3 avoidanceMove = Vector3.zero;
         int avoidCount = 0;
-        // Debug.Log("==avoid for agent " + agent.gameObject.name);
         foreach (Transform item in newContext)
         {
             Vector3 closestPoint = item.GetComponent<Collider>().ClosestPoint(agent.transform.position);
             if (Vector3.SqrMagnitude(closestPoint - agent.transform.position) < agent.SquareAvoidanceRadius) {
                 Vector3 dist = agent.transform.position - closestPoint;
-                // if (Vector3.Dot(dist, agent.transform.forward) <= minimalFrontAvoid) {
-                //     // Debug.Log("FRONT avoiding agent " + item.gameObject.name);
-                //     dist += agent.transform.right * frontAvoidForce;
-                // }
-                // Debug.Log("avoiding agent " + item.gameObject.name);
                 avoidCount++;
                 avoidanceMove += dist.normalized * agent.AvoidanceRadius - dist;
             }

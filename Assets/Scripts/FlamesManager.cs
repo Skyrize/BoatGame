@@ -13,9 +13,14 @@ public class FlamesManager : MonoBehaviour
     }
 
     public void UpdateWithLife(float ratio) {
+
         int index = 0;
-        for (float i = 1; i > ratio; i -= 0.1f) {
-            flames[index].SetActive(true);
+        for (float i = 1; i > 0; i -= 0.1f) {
+            if (i > ratio) {
+                if (!flames[index].activeInHierarchy) flames[index].SetActive(true);
+            } else {
+                if (flames[index].activeInHierarchy) flames[index].SetActive(false);
+            }
             index++;
         }
     }
