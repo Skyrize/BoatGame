@@ -44,7 +44,7 @@ public class AIFleetController : FleetController
 
         foreach (var fleet in allFleets)
         {
-            if (fleet.GetComponentInParent<TeamManager>().team == Team.PLAYER) {
+            if (fleet.GetComponentInParent<TeamManager>().team == Team.PLAYER_1) {
                 playerFleets.Add(fleet);
             }
         }
@@ -123,7 +123,7 @@ public class AIFleetController : FleetController
 
         if (Physics.Raycast(boat.position, leftDirection, out hit, attackRange)) {
             BoatAgent target = hit.transform.gameObject.GetComponent<BoatAgent>();
-            if (target && target.Team == Team.PLAYER) {
+            if (target && target.Team == Team.PLAYER_1) {
                 result = FireSide.LEFT;
             }
             if (debug)
@@ -134,7 +134,7 @@ public class AIFleetController : FleetController
         }
         if (Physics.Raycast(boat.position, rightDirection, out hit, attackRange)) {
             BoatAgent target = hit.transform.gameObject.GetComponent<BoatAgent>();
-            if (target && target.Team == Team.PLAYER) {
+            if (target && target.Team == Team.PLAYER_1) {
                 if (result == FireSide.NONE) {
                     result = FireSide.RIGHT;
                 } else {

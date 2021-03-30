@@ -14,25 +14,14 @@ public class WaypointManager : MonoBehaviour
             return _home;
         }
     }
-    static private WaypointManager _instance = null;
-    static public WaypointManager Instance {
-        get {
-            if (_instance == null)
-                Debug.LogException(new System.Exception("Asking for instance too early (awake)"));
-            return WaypointManager._instance;
-        }
-
-        set {
-            if (_instance) {
-                Debug.LogException(new System.Exception("More thand one WaypointManager in the Scene"));
-            } else {
-                _instance = value;
-            }
-        }
-    }
-
+    public static WaypointManager Instance = null;
+    
     private void Awake() {
-        Instance = this;
+        if (Instance) {
+            Destroy(this);
+        } else {
+            Instance = this;
+        }
     }
 
     public Transform GetRandomWaypoint()

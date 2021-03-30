@@ -11,7 +11,7 @@ public class BoatAgent : FlockAgent
     [SerializeField] protected float speed = 5f;
     [SerializeField] protected float minAcceleration = 0.3f;
     [SerializeField] protected float compensationSpeed = 0.3f;
-    [SerializeField] protected Team team = Team.PLAYER;
+    [SerializeField] protected Team team = Team.PLAYER_1;
     [SerializeField] public Team Team { get { return team; } set { team = value; } }
 
     [Header("BoatAgent")]
@@ -71,25 +71,22 @@ public class BoatAgent : FlockAgent
     }
     
     public Vector3 GetInput() {
-        if (destination == null)
+        if (destination == null) {
+            if (debug) Debug.Log($"{gameObject.name} no destination");
             return transform.forward;
+        }
         if (NavMesh.CalculatePath(transform.position, destination.position, areaMask, path)) {
 
             GetDirection();
 
             if (debug) {
-                // Debug.Log(this.input.ToString());
                 for (int i = 0; i < path.corners.Length - 1; i++) {
                     Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, precision);
                 }
-                if (stop) {
-                    this.accelerationInput = 0;
-                }
+                if (stop) this.accelerationInput = 0;
             }
-        } else {
-            if (debug)
-                Debug.Log("No path found");
-        }
+        } else if (debug) Debug.Log("No path found");
+
         return transform.TransformDirection(this.direction); // normalize or not ?
     }
 

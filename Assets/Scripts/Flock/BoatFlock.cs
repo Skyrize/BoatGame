@@ -14,6 +14,12 @@ public class BoatFlock : Flock
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (Time.timeScale == 0) {
+            return;
+        } else {
+            Debug.Log("puant");
+        }
+            
         UpdateAgents();
     }
 }

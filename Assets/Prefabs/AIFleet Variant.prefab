@@ -34,7 +34,7 @@ MonoBehaviour:
   onFleetDestroyed:
     m_PersistentCalls:
       m_Calls: []
-  fleetTarget: {fileID: 3145182417313008863}
+  fleetTarget: {fileID: 5368099431392819657}
   remainingBoats: -1
   arrivalDist: 35
   detectionRange: 400
@@ -241,9 +241,9 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5091504946804148641}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &3145182417313008863 stripped
+--- !u!4 &5368099431392819657 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 7858014420265911678, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+  m_CorrespondingSourceObject: {fileID: 925482267919446120, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
     type: 3}
   m_PrefabInstance: {fileID: 5091504946804148641}
   m_PrefabAsset: {fileID: 0}

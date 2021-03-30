@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using MLAPI;
+using MLAPI.Messaging;
+using MLAPI.NetworkVariable;
 
 [System.Serializable]
 public class DamageEvent : UnityEvent<float>
@@ -52,13 +55,18 @@ public class LifeEvent : UnityEvent<float>
     }
 }
 
-public class HealthComponent : MonoBehaviour
+public class HealthComponent : NetworkBehaviour
 {
     [Header("Attributes")]
     [SerializeField]
-    private float _actualHealth = 100;
+    private NetworkVariableFloat actualHealth = new NetworkVariableFloat(
+        new NetworkVariableSettings {
+            WritePermission = NetworkVariablePermission.ServerOnly,
+            ReadPermission = NetworkVariablePermission.Everyone
+        }, 100f
+    );
     [SerializeField]
-    private float maxHealth = 100;
+    private float maxHealth = 100f;
 
     [Header("Events")]
     public HealEvent onHealEvent = new HealEvent();
@@ -66,19 +74,33 @@ public class HealthComponent : MonoBehaviour
     public DeathEvent onDeathEvent = new DeathEvent();
     public LifeEvent onLifeUpdate = new LifeEvent();
 
-    private float actualHealth {
+    private float ActualHealth {
         get {
-            return _actualHealth;
+            return actualHealth.Value;
         }
         set {
-            _actualHealth = Mathf.Clamp(value, 0, maxHealth);
-            onLifeUpdate.Invoke(_actualHealth / maxHealth);
+            if (IsHost) {
+                actualHealth.Value = Mathf.Clamp(value, 0, maxHealth);
+                onLifeUpdate.Invoke(HealthRatio);
+                OnLifeUpdateClientRpc();
+            }
         }
     }
 
+    [ClientRpc]
+    void OnLifeUpdateClientRpc()
+    {
+        if (IsHost)
+            return;
+        onLifeUpdate.Invoke(HealthRatio);
+    }
+
+
+    public float HealthRatio => actualHealth.Value / maxHealth;
+
     public float Health {
         get {
-            return _actualHealth;
+            return actualHealth.Value;
         }
     }
 
@@ -90,7 +112,7 @@ public class HealthComponent : MonoBehaviour
 
     public bool IsAlive {
         get {
-            return actualHealth > 0;
+            return actualHealth.Value > 0;
         }
     }
     public bool IsDead {
@@ -99,25 +121,66 @@ public class HealthComponent : MonoBehaviour
         }
     }
 
+    public override void NetworkStart()
+    {
+        base.NetworkStart();
+        
+    }
+
+    [ClientRpc]
+    void OnDamageEventClientRpc(float amount)
+    {
+        if (IsHost)
+            return;
+        onDamageEvent.Invoke(amount);
+    }
+    [ClientRpc]
+    void OnDeathEventClientRpc()
+    {
+        if (IsHost)
+            return;
+        onDeathEvent.Invoke();
+    }
     public void ReduceHealth(float amount)
     {
-        if (IsDead)
+        if (IsDead || !IsHost)
             return;
-        actualHealth -= amount;
+        ActualHealth -= amount;
         onDamageEvent.Invoke(amount);
-        if (IsDead)
+        OnDamageEventClientRpc(amount);
+        if (IsDead) {
             onDeathEvent.Invoke();
+            OnDeathEventClientRpc();
+        }
     }
     
+    [ClientRpc]
+    void OnHealEventClientRpc(float amount)
+    {
+        if (IsHost)
+            return;
+        onHealEvent.Invoke(amount);
+    }
     public void IncreaseHealth(float amount)
     {
-        if (IsDead)
+        if (IsDead || !IsHost)
             return;
-        actualHealth += amount;
+        ActualHealth += amount;
         onHealEvent.Invoke(amount);
+        OnHealEventClientRpc(amount);
+    }
+    [ClientRpc]
+    void KillClientRpc()
+    {
+        if (IsHost)
+            return;
+        Destroy(this.gameObject);
     }
 
     public void Kill() {
+        if (!IsHost)
+            return;
+        KillClientRpc();
         Destroy(this.gameObject);
     }
 

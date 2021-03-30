@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MLAPI;
 
-public class CameraController : MonoBehaviour
+public class CameraController : NetworkBehaviour
 {
     [Header("Settings")]
     [SerializeField] protected float speed = 20f;
@@ -14,10 +15,28 @@ public class CameraController : MonoBehaviour
     
     [Header("Runtime")]
     [SerializeField] protected Vector3 direction = Vector3.zero;
+    protected Camera cam;
+    protected Plane seaLevel = new Plane(Vector3.up, Vector3.zero);
     // Start is called before the first frame update
     void Start()
     {
-        
+        cam = GetComponent<Camera>();
+        boundaries = PlayerStartManager.Instance.boundaries;
+        if (IsHost) {
+            Focus(PlayerStartManager.Instance.playerOneStart.position);
+        } else {
+            Focus(PlayerStartManager.Instance.playerTwoStart.position);
+        }
+    }
+
+    public override void NetworkStart()
+    {
+        base.NetworkStart();
+        // if (!IsLocalPlayer) {
+        //     Destroy(GetComponent<AudioListener>());
+        //     Destroy(GetComponent<Camera>());
+        //     gameObject.tag = "OtherCamera";
+        // }
     }
 
     void Move()
@@ -58,10 +77,23 @@ public class CameraController : MonoBehaviour
         transform.position = finalPos;
     }
 
+    public void Focus(Vector3 position)
+    {
+        if (!cam)
+            cam = Camera.main;
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        float distance;
+        seaLevel.Raycast(ray, out distance);
+        Vector3 move = position - ray.direction * distance;
+        move.y = cam.transform.position.y;
+        cam.transform.position = move;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        Move();
+        if (IsLocalPlayer)
+            Move();
         // if (Input.GetMouseButtonDown(1)) {
         //     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //     // mousePos.z = transform.position.z;

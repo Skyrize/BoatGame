@@ -19,6 +19,7 @@ public class BoidFlock : Flock
     // Update is called once per frame
     protected virtual void Update()
     {
+        if (Time.timeScale == 0) return;
         UpdateAgents();
     }
 }

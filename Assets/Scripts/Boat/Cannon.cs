@@ -18,11 +18,10 @@ public class Cannon : MonoBehaviour
     [Header("Events")]
     [SerializeField] protected UnityEvent onFire = new UnityEvent();
     [Header("References")]
-    [SerializeField] protected GameObject cannonBallPrefab;
+    [SerializeField] protected GameObject cannonBall = null;
     [Header("Runtime")]
     [SerializeField] protected bool isLoaded = true;
 
-    private GameObject cannonBall = null;
 
     private Flock parentFlock;
 
@@ -31,12 +30,11 @@ public class Cannon : MonoBehaviour
     void Start()
     {
         parentFlock = GetComponentInParent<Flock>();
-        cannonBall = GameObject.Instantiate(cannonBallPrefab, transform.position, transform.rotation, transform);
         
         cannonBall.GetComponent<EventBinder>().CallEvent("Disable");
-        cannonBall.SetActive(false);
+        // cannonBall.SetActive(false);
 
-        if (GetComponentInParent<TeamManager>().team != Team.PLAYER) {
+        if (GetComponentInParent<TeamManager>().team != Team.PLAYER_1) {
             isAI = true;
         }
     }
@@ -62,7 +60,7 @@ public class Cannon : MonoBehaviour
             targetBoat = hit.transform.GetComponent<BoatAgent>();
             if (targetBoat && targetBoat.flock == parentFlock) {
                 if (isAI) {
-                    if (targetBoat.Team != Team.PLAYER) {
+                    if (targetBoat.Team != Team.PLAYER_1) {
                         canFire = false;
                     }
                 } else {
@@ -106,7 +104,7 @@ public class Cannon : MonoBehaviour
             return;
         if (cannonBall.GetComponent<CannonBall>().enabled == false) {
             isLoaded = false;
-            cannonBall.SetActive(true);
+            // cannonBall.SetActive(true);
             cannonBall.GetComponent<EventBinder>().CallEvent("Reset");
             cannonBall.transform.position = transform.position;
             cannonBall.transform.rotation = transform.rotation;

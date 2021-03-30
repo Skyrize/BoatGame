@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.AI;
+using MLAPI;
+using MLAPI.Messaging;
 
 [System.Serializable]
 public class FleetEvent : UnityEvent<FleetController>
 {
 }
-public class FleetController : MonoBehaviour
+public class FleetController : NetworkBehaviour
 {
     [Header("Events")]
     [SerializeField] public FleetEvent onFleetDestroyed = new FleetEvent();
@@ -41,7 +43,7 @@ public class FleetController : MonoBehaviour
         }
         Unselect();
     }
-
+    
     public void OnBoatDestroyed()
     {
         remainingBoats--;
@@ -54,6 +56,34 @@ public class FleetController : MonoBehaviour
     void Update()
     {
         
+    }
+
+    [ClientRpc]
+    void KillClientRpc()
+    {
+        if (IsHost)
+            return;
+        var boats = GetComponentsInChildren<HealthComponent>();
+        foreach (var boat in boats)
+        {
+            boat.ReduceHealth(boat.MaxHealth);
+        }
+    }
+
+    [ServerRpc]
+    void KillServerRpc()
+    {
+        KillClientRpc();
+        var boats = GetComponentsInChildren<HealthComponent>();
+        foreach (var boat in boats)
+        {
+            boat.ReduceHealth(boat.MaxHealth);
+        }
+    }
+
+    public void Kill()
+    {
+        KillServerRpc();
     }
 
     public void SetDestination(Vector3 destination)

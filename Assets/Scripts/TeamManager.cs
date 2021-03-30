@@ -4,13 +4,14 @@ using UnityEngine;
 
 public enum Team
 {
-    PLAYER,
+    PLAYER_1,
+    PLAYER_2,
     AI
 }
 
 public class TeamManager : MonoBehaviour
 {
-    public Team team = Team.PLAYER;
+    public Team team = Team.PLAYER_1;
 
     private void Start() {
         foreach (BoatAgent boat in transform.GetComponentsInChildren<BoatAgent>())

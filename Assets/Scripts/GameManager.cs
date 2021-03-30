@@ -3,46 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using MLAPI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
-    [Header("Settings")]
-    [SerializeField] protected LayerMask selectableMask = 1;
+    [Header("References")]
+    [SerializeField] protected GameObject fleetsAI = null;
+    [SerializeField] protected GameObject fleetsPlayer2 = null;
     [Header("Runtime")]
-    [SerializeField] protected FleetController controlledFleet = null;
-    [SerializeField]
-    protected List<FleetController> fleets = new List<FleetController>();
+    public FleetController[] fleets;
+    public Team team = Team.PLAYER_1;
     [SerializeField] protected int remainingPlayerFleets = -1;
     [SerializeField] protected int remainingEnemyFleets = -1;
+    PlayMode playMode = PlayMode.SOLO;
     [Header("Events")]
-    [SerializeField] protected UnityEvent onLevelStart = new UnityEvent();
     [SerializeField] protected UnityEvent onWin = new UnityEvent();
     [SerializeField] protected UnityEvent onLose = new UnityEvent();
 
-    static protected GameManager _instance = null;
-    static public GameManager instance {
-        get {
-            if (_instance == null)
-                Debug.LogException(new System.Exception("Asking for instance too early (awake)"));
-            return GameManager._instance;
+    public static GameManager Instance = null;
+    
+    private void Awake() {
+        if (Instance) {
+            Destroy(this);
+        } else {
+            Instance = this;
         }
-
-        set {
-            if (_instance) {
-                Debug.LogException(new System.Exception("More thand one GameManager in the Scene"));
-            } else {
-                _instance = value;
-            }
-        }
-    }
-
-    protected Camera cam;
-    protected Plane seeLevel = new Plane(Vector3.up, Vector3.zero);
-
-    protected void Awake() {
-        instance = this;
-        cam = Camera.main;
-        // DontDestroyOnLoad(this.gameObject);
     }
 
     public void DisableMouse()
@@ -101,18 +86,15 @@ public class GameManager : MonoBehaviour
         }  
     }
 
-    // Start is called before the first frame update
-    void Start()
+    void SetupFleets()
     {
-        onLevelStart.Invoke();
-        var allFleets = GameObject.FindObjectsOfType<FleetController>();
+        fleets = GameObject.FindObjectsOfType<FleetController>();
 
         remainingPlayerFleets = 0;
         remainingEnemyFleets = 0;
-        foreach (var fleet in allFleets)
+        foreach (var fleet in fleets)
         {
-            if (fleet.GetComponentInParent<TeamManager>().team == Team.PLAYER) {
-                fleets.Add(fleet);
+            if (fleet.GetComponentInParent<TeamManager>().team == team) {
                 fleet.onFleetDestroyed.AddListener(DecreasePlayerFleet);
                 remainingPlayerFleets++;
             } else {
@@ -122,93 +104,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void UnselectFleet()
+    public void Init(PlayMode mode)
     {
-        if (controlledFleet) {
-            controlledFleet.Unselect();
-            controlledFleet = null;
+        this.playMode = mode;
+        switch (mode) {
+            case PlayMode.SOLO:
+            fleetsPlayer2.SetActive(false);
+            break;
+            case PlayMode.MULTIPLAYER:
+            fleetsAI.SetActive(false);
+            break;
         }
+        if (IsHost) {
+            team = Team.PLAYER_1; // bof
+        } else {
+            team = Team.PLAYER_2; // et re bof
+        }
+        SetupFleets();
     }
 
-    void FocusFleet()
-    {
-        if (!controlledFleet)
-            return;
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        float distance;
-        seeLevel.Raycast(ray, out distance);
-        Vector3 move = controlledFleet.transform.GetChild(0).position - ray.direction * distance;
-        move.y = cam.transform.position.y;
-        cam.transform.position = move;
-    }
-
-    void SelectFleet(FleetController target)
-    {
-        if (controlledFleet == target || target.GetComponentInParent<TeamManager>().team != Team.PLAYER)
-            return;
-        UnselectFleet();
-        controlledFleet = target;
-        controlledFleet.Select();
-    }
-
-    void SelectWithMouse() {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        BoatAgent target = null;
-
-        Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red, 5f);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, selectableMask)) {
-            target = hit.transform.GetComponent<BoatAgent>();
-
-            if (target) {
-                SelectFleet(target.flock.GetComponent<FleetController>());
-                return;
-            }
-        }
-        UnselectFleet();
-    }
-
-    void MoveFleet() {
-        if (!controlledFleet)
-            return;
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        float distance;
-        seeLevel.Raycast(ray, out distance);
-        controlledFleet.SetDestination(ray.GetPoint(distance));
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0)) {
-            SelectWithMouse();
-        }
-        if (Input.GetMouseButtonDown(1)) {
-            MoveFleet();
-        }
-        if (Input.GetKey(KeyCode.Space)) {
-            FocusFleet();
-        }
-        
-        
-        if (Input.GetKeyDown(KeyCode.A) && controlledFleet) {
-            controlledFleet.FireLeft();
-            
-        }
-        
-        if (Input.GetKeyDown(KeyCode.E) && controlledFleet) {
-            controlledFleet.FireRight();
-            
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            GetComponent<SceneManager>().LoadScene("Menu");
-        }
-
-        for (int i = 0; i != fleets.Count; i++) {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i)) {
-                SelectFleet(fleets[i]);
-            }
-        }
-    }
 }

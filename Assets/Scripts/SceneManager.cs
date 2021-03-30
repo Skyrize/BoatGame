@@ -1,11 +1,19 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using Manager = UnityEngine.SceneManagement.SceneManager;
+using UnityEngine.SceneManagement;
 
 public class SceneManager : MonoBehaviour
 {
+    public static SceneManager Instance = null;
+    
+    private void Awake() {
+        if (Instance) {
+            Destroy(this);
+        } else {
+            Instance = this;
+        }
+    }
 
     public void ReloadCurrentScene()
     {
@@ -40,5 +48,52 @@ public class SceneManager : MonoBehaviour
 		#else
 		Application.Quit();
 		#endif
+    }
+    
+    void OnSoloSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        NetworkHandler.Instance.StartHost();
+        Manager.sceneLoaded -= OnSoloSceneLoaded;
+        GameManager.Instance.Init(PlayMode.SOLO);
+        NetworkLevel.Instance.Unpause();
+    }
+
+    void OnHostSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        NetworkHandler.Instance.StartHost();
+        Manager.sceneLoaded -= OnHostSceneLoaded;
+        GameManager.Instance.Init(PlayMode.MULTIPLAYER);
+        NetworkLevel.Instance.OnHosted();
+    }
+
+    public void StartSoloLevel(string level)
+    {
+        Manager.sceneLoaded += OnSoloSceneLoaded;
+        LoadScene(level);
+    }
+
+    public void StartHostLevel(string level)
+    {
+        Manager.sceneLoaded += OnHostSceneLoaded;
+        LoadScene(level);
+    }
+
+    public void Join()
+    {
+        NetworkHandler.Instance.StartClient();
+    }
+
+    public void StartJoinLevel()
+    {
+        GameManager.Instance.Init(PlayMode.MULTIPLAYER);
+    }
+
+    public void BackToMenu()
+    {
+        if (Manager.GetActiveScene().name == "Menu") {
+            return;
+        }
+        NetworkHandler.Instance.Disconnect();
+        LoadScene("Menu");
     }
 }
