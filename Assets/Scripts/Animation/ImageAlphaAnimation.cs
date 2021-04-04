@@ -8,6 +8,9 @@ using UnityEngine.UI;
 public class ImageAlphaAnimation : TweenAnimation
 {
     [Header("Settings")]
+    [SerializeField] protected bool currentColorHasStart = true;
+
+    [SerializeField] protected Color startColor = Color.black;
     [SerializeField] protected Color endColor = Color.black;
 
     override public GeneratedAnimation GenerateAnimation(Transform target) {
@@ -16,6 +19,7 @@ public class ImageAlphaAnimation : TweenAnimation
 
         if (!image)
             throw new System.Exception("Can't generate ImageAlphaAnimation without an Image on the target transform");
+        image.color = currentColorHasStart ? image.color : startColor;
         if (reverse) {
             animation.Append(image.DOColor(endColor, duration / 2).SetEase(generalEase));
             animation.Append(image.DOColor(image.color, duration / 2).SetEase(generalEase));
@@ -26,6 +30,7 @@ public class ImageAlphaAnimation : TweenAnimation
         animation.SetLoops(loops, loopType);
         // animation.SetEase(generalEase);
         animation.Pause();
-        return new GeneratedAnimation(animation, Name);
+        animation.SetUpdate(playWhenPause);
+        return new GeneratedAnimation(animation, name);
     }
 }

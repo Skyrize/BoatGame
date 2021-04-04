@@ -106,7 +106,7 @@ MonoBehaviour:
   boundaries:
     m_Center: {x: 0, y: 200, z: 0}
     m_Extent: {x: 450, y: 200, z: 450}
-  debug: 1
+  debug: 0
   direction: {x: 0, y: 0, z: 0}
 --- !u!114 &1839327536135758246
 MonoBehaviour:

@@ -5,8 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Flock/Behavior/Avoidance")]
 public class AvoidanceBehavior : FilteredFlockBehavior
 {
-    public float frontAvoidForce = 1.5f;
-    public float minimalFrontAvoid = -.9f;
     public override Vector3 CalculateMove(in FlockAgent agent, in List<Transform> context)
     {
         List<Transform> newContext = filter != null ? filter.filter(agent, context) : context;

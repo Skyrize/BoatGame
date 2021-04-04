@@ -4,26 +4,37 @@ using UnityEngine;
 
 public class BoidAgent : FlockAgent
 {
+    public float speed = 1;
+    public float rotateSpeed = 5;
+    Vector3 currentVelocity;
+    [SerializeField] protected float smoothTime = 0.5f;
     override protected void Awake() {
         squareMaxSpeed = maxSpeed * maxSpeed;
         squareNeighborRadius = neighborRadius * neighborRadius;
         squareAvoidanceRadius = squareNeighborRadius * avoidanceRadiusMultiplier * avoidanceRadiusMultiplier;
     }
 
-    public override void Move(Vector3 velocity)
+    public override void Move(Vector3 target)
     {
-        if (velocity == Vector3.zero) {
-            Debug.Log("Zero for agent " + gameObject.name);
-            Debug.Break();
+        target.y = 0;
+        if (target == Vector3.zero) {
+            target = transform.position + transform.forward;
         }
-        velocity.y = 0;
-        transform.forward = velocity;
+        Quaternion targetRotation = Quaternion.LookRotation(target);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation , Time.deltaTime * rotateSpeed);
+        // Quaternion nextRotation = Quaternion.Lerp(transform.rotation, )
+        // Vector3 smoothed = Vector3.SmoothDamp(transform.forward, transform.position + target, ref currentVelocity, smoothTime);
+        // if (float.IsNaN(smoothed.x) || float.IsNaN(smoothed.y) || float.IsNaN(smoothed.z)) {
+        //     smoothed = target;
+        // }
+        // transform.forward = target;
 
-        // rb.AddForce(velocity, ForceMode.VelocityChange);
-        // rb.MovePosition(transform.position + velocity * Time.deltaTime);
-        transform.Translate(velocity * Time.deltaTime, Space.World);
-        // transform.Translate(velocity * Time.deltaTime);
-        // transform.position += velocity * Time.deltaTime;
+        if (debug) Debug.DrawRay(transform.position + target, Vector3.up * 10, Color.blue, Time.deltaTime);
+        // rb.AddForce(target, ForceMode.VelocityChange);
+        // rb.MovePosition(transform.position + target * Time.deltaTime);
+        transform.Translate(transform.forward * speed * Time.deltaTime, Space.World);
+        // transform.Translate(target * Time.deltaTime);
+        // transform.position += target * Time.deltaTime;
     }
 
     private void OnDrawGizmos() {

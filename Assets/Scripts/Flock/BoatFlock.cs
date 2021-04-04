@@ -16,8 +16,6 @@ public class BoatFlock : Flock
     {
         if (Time.timeScale == 0) {
             return;
-        } else {
-            Debug.Log("puant");
         }
             
         UpdateAgents();

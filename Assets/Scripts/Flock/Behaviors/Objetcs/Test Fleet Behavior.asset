@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 138bd079adb249748b6ce9f27e15bf0a, type: 3}
+  m_Name: Test Fleet Behavior
+  m_EditorClassIdentifier: 
+  useMax: 0
+  behaviors:
+  - behavior: {fileID: 11400000, guid: ff65e8e4120235b4086468fed190e664, type: 2}
+    weight: 0.2
+    max: 1000
+  - behavior: {fileID: 11400000, guid: 5955b3a570b6ca94eb9413c67cd319c6, type: 2}
+    weight: 100
+    max: 1000
+  - behavior: {fileID: 11400000, guid: 32372445908a73b41ba49a726bef9f9d, type: 2}
+    weight: 1
+    max: 1000

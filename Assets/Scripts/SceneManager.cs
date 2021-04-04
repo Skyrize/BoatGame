@@ -90,6 +90,7 @@ public class SceneManager : MonoBehaviour
 
     public void BackToMenu()
     {
+        Time.timeScale = 1;
         if (Manager.GetActiveScene().name == "Menu") {
             return;
         }

@@ -6,7 +6,7 @@ public abstract class FlockAgent : MonoBehaviour
 {
     [Header("Settings")]
     public bool debug = false;
-    [Range(1f, 100f)]
+    [Min(1)]
     [SerializeField] protected float neighborRadius = 5f;
     [Range(0f, 1f)]
     [SerializeField] protected float avoidanceRadiusMultiplier = 0.5f;
@@ -52,8 +52,14 @@ public abstract class FlockAgent : MonoBehaviour
 
         foreach (Collider obstacle in obstacles)
         {
-            if (obstacle.attachedRigidbody != rb) {
-                result.Add(obstacle.transform);
+            if (rb) {
+                if (obstacle.attachedRigidbody != rb) {
+                    result.Add(obstacle.transform);
+                }
+            } else {
+                if (obstacle.gameObject != this.gameObject) {
+                    result.Add(obstacle.transform);
+                }
             }
         }
         return result;

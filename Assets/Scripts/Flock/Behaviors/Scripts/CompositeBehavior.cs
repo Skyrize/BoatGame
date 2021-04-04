@@ -13,6 +13,7 @@ public struct Behavior
 [CreateAssetMenu(menuName = "Flock/Behavior/Composite")]
 public class CompositeBehavior : FlockBehavior
 {
+    public bool useMax = true;
     [SerializeField] protected Behavior[] behaviors;
     public override Vector3 CalculateMove(in FlockAgent agent, in List<Transform> context)
     {
@@ -22,8 +23,18 @@ public class CompositeBehavior : FlockBehavior
         {
             Vector3 move = item.behavior.CalculateMove(agent, context) * item.weight;
 
-            if (move.sqrMagnitude != 0 && move.sqrMagnitude > item.max * item.max) {
-                move = move.normalized * item.max;
+            if (useMax) {
+                if (move.sqrMagnitude != 0 && move.sqrMagnitude > item.max * item.max) {
+                    move = move.normalized * item.max;
+                }
+            } else {
+                if (move.sqrMagnitude != 0 && move.sqrMagnitude > item.weight * item.weight) {
+                    move = move.normalized * item.weight;
+                }
+            }
+            if (item.behavior.name == "Avoidance Behavior") {
+                
+                Debug.DrawRay(move, Vector3.up * 10, Color.green, Time.deltaTime);
             }
             result += move;
         }

@@ -11,6 +11,7 @@ public class CameraController : NetworkBehaviour
     [SerializeField] protected float scrollSpeed = 200f;
     [SerializeField] protected float borderThicknessRatio = 10f;
     [SerializeField] protected Bounds boundaries = new Bounds();
+    public Bounds Boundaries => boundaries;
     [SerializeField] protected bool debug = true;
     
     [Header("Runtime")]
@@ -27,16 +28,6 @@ public class CameraController : NetworkBehaviour
         } else {
             Focus(PlayerStartManager.Instance.playerTwoStart.position);
         }
-    }
-
-    public override void NetworkStart()
-    {
-        base.NetworkStart();
-        // if (!IsLocalPlayer) {
-        //     Destroy(GetComponent<AudioListener>());
-        //     Destroy(GetComponent<Camera>());
-        //     gameObject.tag = "OtherCamera";
-        // }
     }
 
     void Move()
