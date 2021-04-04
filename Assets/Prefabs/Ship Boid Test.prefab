@@ -70,7 +70,7 @@ MonoBehaviour:
   flock: {fileID: 0}
   rb: {fileID: 0}
   speed: 15
-  rotateSpeed: 20
+  rotateSpeed: 40
   smoothTime: 100
 --- !u!1 &7277460028752503800
 GameObject:
