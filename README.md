@@ -1,6 +1,6 @@
 # Boat Game
 
- Boat game project using Boids for my Heriot-Watt Master course
+ Boat game project using Boids and MLAPI for my Heriot-Watt Master course
 
  3 different levels available
  2 gamemodes : 
