@@ -197,7 +197,7 @@ public class PlayerController : NetworkBehaviour
             }
             
             
-            if (Input.GetKeyDown(KeyCode.A)) {
+            if (Input.GetKeyDown(KeyCode.Q)) {
                 FireLeft();
                 
             }
