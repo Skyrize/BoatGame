@@ -197,12 +197,12 @@ public class PlayerController : NetworkBehaviour
             }
             
             
-            if (Input.GetKeyDown(KeyCode.Q)) {
+            if (Input.GetKeyDown(CustomInputManager.Instance.keyShootLeft)) {
                 FireLeft();
                 
             }
             
-            if (Input.GetKeyDown(KeyCode.E)) {
+            if (Input.GetKeyDown(CustomInputManager.Instance.keyShootRight)) {
                 FireRight();
                 
             }

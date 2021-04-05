@@ -30,6 +30,21 @@ public class CameraController : NetworkBehaviour
         }
     }
 
+    float CustomAxis(KeyCode positive, KeyCode negative)
+    {
+        bool i1 = Input.GetKey(positive);
+        bool i2 = Input.GetKey(negative);
+        float res = 0;
+
+        if ((!i1 && !i2) || (i1 && i2))
+            return res;
+        if (i1) {
+            res = 1;
+        } else {
+            res = -1;
+        }
+        return res;
+    }
     void Move()
     {
         float yPixels = Screen.height / borderThicknessRatio;
@@ -39,8 +54,11 @@ public class CameraController : NetworkBehaviour
         float yMax = Screen.height - yPixels;
         float xMax = Screen.width - yPixels;
 
-        direction.x = Input.GetAxisRaw("Horizontal");
-        direction.z = Input.GetAxisRaw("Vertical");
+        direction.z = CustomAxis(CustomInputManager.Instance.keyUp, CustomInputManager.Instance.keyDown);
+        direction.x = CustomAxis(CustomInputManager.Instance.keyRight, CustomInputManager.Instance.keyLeft);
+
+        // direction.x = Input.GetAxisRaw("Horizontal");
+        // direction.z = Input.GetAxisRaw("Vertical");
 
         if (!debug) {
             if (Input.mousePosition.x <= xMin) {
