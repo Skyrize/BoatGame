@@ -26,6 +26,8 @@ Space : Focus selected fleet
 
 Escape : Return to the main menu
 
+(for AZERTY keyboard users, you can switch controls in top right corner in the menu)
+
 ____
 ### Ressources
 
