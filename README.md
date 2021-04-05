@@ -29,7 +29,7 @@ Escape : Return to the main menu
 (for AZERTY keyboard users, you can switch controls in top right corner in the menu)
 
 ____
-### Ressources
+### Resources
 
 - [Boats and buildings](https://assetstore.unity.com/packages/3d/props/exterior/low-poly-brick-houses-131899)
 - [Animations (tween)](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676)
