@@ -232,6 +232,66 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8943821377766261980, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: maxHealth
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943821377766261980, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: actualHealth.m_InternalValue
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943821377993921953, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: maxHealth
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943821377993921953, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: actualHealth.m_InternalValue
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943821378257290938, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: maxHealth
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943821378257290938, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: actualHealth.m_InternalValue
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943821378707874120, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: maxHealth
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943821378707874120, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: actualHealth.m_InternalValue
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943821379040669028, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: maxHealth
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943821379040669028, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: actualHealth.m_InternalValue
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943821379347403337, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: maxHealth
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8943821379347403337, guid: 7b1cb3f30efd24346a5c65f0fb7c1171,
+        type: 3}
+      propertyPath: actualHealth.m_InternalValue
+      value: 75
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5897326235740483162, guid: 7b1cb3f30efd24346a5c65f0fb7c1171, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7b1cb3f30efd24346a5c65f0fb7c1171, type: 3}

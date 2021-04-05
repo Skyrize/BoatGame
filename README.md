@@ -39,3 +39,4 @@ ____
 - [Trees and other decorations](https://kenney.nl/assets/pirate-kit)
 - [FPS counter](https://assetstore.unity.com/packages/tools/integration/lite-fps-counter-probably-the-world-s-fastest-fps-counter-132638)
 - [Network](https://github.com/Unity-Technologies/com.unity.multiplayer.mlapi)
+- [Cursor](https://skyops.itch.io/ergonomic-cursors)
