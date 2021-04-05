@@ -61,6 +61,7 @@ class CustomPlacer : MonoBehaviour
     static void SpecialCommand() {
         Instance.SpawnItem();
     }
+    
 
     private void Update() {
         if (!Instance)

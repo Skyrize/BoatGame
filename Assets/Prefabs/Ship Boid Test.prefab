@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7277460028652572469}
   - component: {fileID: 1365788369392425710}
-  - component: {fileID: 7205523054689591231}
+  - component: {fileID: 7311309245217081562}
   m_Layer: 11
   m_Name: Ship Boid Test
   m_TagString: Untagged
@@ -47,7 +47,7 @@ CapsuleCollider:
   m_Height: 23.78
   m_Direction: 2
   m_Center: {x: 0, y: 2.2, z: 0.31}
---- !u!114 &7205523054689591231
+--- !u!114 &7311309245217081562
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,7 +56,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7277460028652571849}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e153baa43b6ddec41a491189fbb7588c, type: 3}
+  m_Script: {fileID: 11500000, guid: bd507794a2d6dd64faf2218e626286aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
@@ -72,6 +72,7 @@ MonoBehaviour:
   speed: 15
   rotateSpeed: 20
   smoothTime: 100
+  context: []
 --- !u!1 &7277460028752503800
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,7 +289,7 @@ PrefabInstance:
     - target: {fileID: 855783246480355869, guid: 838f2055e3c24e9418e1a55135c00a24,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5076469203758298689, guid: 838f2055e3c24e9418e1a55135c00a24,
         type: 3}

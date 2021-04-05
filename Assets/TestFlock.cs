@@ -7,6 +7,7 @@ public class TestFlock : Flock
     public int nbAgentGenerate = 500;
     override public void UpdateAgent(FlockAgent agent)
     {
+        
         List<Transform> context = agent.GetNearbyObstacles();
         Vector3 move = behavior.CalculateMove(agent, context);
         move *= agent.DriveFactor;

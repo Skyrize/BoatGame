@@ -75,6 +75,8 @@ public class TestCameraController : MonoBehaviour
     void Update()
     {
         Move();
+        if (Input.GetKeyDown(KeyCode.Escape))
+            SceneManager.Instance.LoadScene("Menu");
     }
 
     private void OnDrawGizmos() {
