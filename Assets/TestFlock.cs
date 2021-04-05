@@ -4,7 +4,18 @@ using UnityEngine;
 
 public class TestFlock : Flock
 {
+    public bool fillAtStart = true;
     public int nbAgentGenerate = 500;
+
+    void Start() {
+        if (fillAtStart) Populate();
+        
+        foreach (FlockAgent agent in agents)
+        {
+            agent.flock = this;
+        }
+    }
+
     override public void UpdateAgent(FlockAgent agent)
     {
         List<Transform> context = agent.GetNearbyObstacles();
